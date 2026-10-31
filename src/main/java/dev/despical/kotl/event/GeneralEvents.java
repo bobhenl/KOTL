@@ -219,6 +219,8 @@ public class GeneralEvents extends ListenerAdapter {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
+        // Moving items only matters when the inventory is restored from a snapshot on leave.
+        if (!BooleanOption.SAVE_INVENTORY.value()) return;
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
         Arena arena = arenaRegistry.getArena(player);
@@ -270,7 +272,7 @@ public class GeneralEvents extends ListenerAdapter {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSwapHandItems(PlayerSwapHandItemsEvent event) {
-        if (arenaRegistry.isInArena(event.getPlayer())) {
+        if (BooleanOption.SAVE_INVENTORY.value() && arenaRegistry.isInArena(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
